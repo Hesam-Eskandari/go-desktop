@@ -21,14 +21,14 @@ func NewEventSubscriber[T any](id string, bufferSize int) IEventSubscriber[T] {
 	}
 }
 
-func (is *eventSubscriber[T]) Update(event T) {
-	is.subscriberEventChan <- event
+func (es *eventSubscriber[T]) Update(event T) {
+	es.subscriberEventChan <- event
 }
 
-func (is *eventSubscriber[T]) GetId() string {
-	return is.id
+func (es *eventSubscriber[T]) GetId() string {
+	return es.id
 }
 
-func (is *eventSubscriber[T]) GetEventChan() <-chan T {
-	return is.subscriberEventChan
+func (es *eventSubscriber[T]) GetEventChan() <-chan T {
+	return es.subscriberEventChan
 }
