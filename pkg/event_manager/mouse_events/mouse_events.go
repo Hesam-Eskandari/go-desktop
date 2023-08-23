@@ -9,22 +9,37 @@ type MouseEventType string
 const (
 	MouseButtonUp   MouseEventType = "mouseUp"
 	MouseButtonDown MouseEventType = "mouseDown"
+	MouseButtonDrag MouseEventType = "mouseDrag"
 )
 
 type MouseEvent struct {
 	coordinate.EventCoordinate
 	mouseEventType MouseEventType
+	ButtonCode     uint16
 }
 
-func NewMouseEvent(coords coordinate.EventCoordinate, mouseEventType MouseEventType) MouseEvent {
-	return MouseEvent{coords, mouseEventType}
+func NewMouseEvent(coords coordinate.EventCoordinate, mouseEventType MouseEventType, ButtonCode uint16) MouseEvent {
+	return MouseEvent{coords, mouseEventType, ButtonCode}
 }
 
 type MouseEventState struct {
-	States     chan MouseEvent
+	states     chan MouseEvent
 	ButtonCode uint16
 }
 
 func NewMouseEventState(ButtonCode uint16) MouseEventState {
-	return MouseEventState{make(chan MouseEvent, 2), ButtonCode}
+	states := make(chan MouseEvent, 100)
+	return MouseEventState{states, ButtonCode}
+}
+
+func (mes *MouseEventState) PushState(mv MouseEvent) {
+	mes.states <- mv
+}
+
+func (mes *MouseEventState) GetStates() <-chan MouseEvent {
+	return mes.states
+}
+
+func (mes *MouseEventState) CloseStates() {
+	close(mes.states)
 }
