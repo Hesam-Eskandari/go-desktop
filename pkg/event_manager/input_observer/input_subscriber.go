@@ -14,6 +14,6 @@ type IInputSubscriber interface {
 }
 
 func NewInputSubscriber(id string) IInputSubscriber {
-	inputCacheSize := 1000
+	inputCacheSize := 10
 	return &inputSubscriber{event_observer.NewEventSubscriber[hook.Event](id, inputCacheSize)}
 }
