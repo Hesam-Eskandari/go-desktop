@@ -22,7 +22,7 @@ func NewInputPublisher() IInputPublisher {
 	if singletonInputPublisher != nil {
 		return singletonInputPublisher
 	}
-	bufferSize := 1000
+	bufferSize := 10
 	singletonInputPublisher = &inputPublisher{event_observer.NewEventPublisher[hook.Event](hook.Start(), bufferSize)}
 	return singletonInputPublisher
 }
